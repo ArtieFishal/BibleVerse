@@ -47,6 +47,11 @@ jobs:
             exit 1
           fi
 
+          echo "=== JWT check (Pinata /data/pinningList) ==="
+          curl -s -w "\nHTTP_STATUS:%{http_code}\n" \
+            -X GET "https://api.pinata.cloud/data/pinningList?status=pinned&pageLimit=1" \
+            -H "Authorization: Bearer ${PINATA_JWT}" | head -20
+
           # Pinata directory upload: each file path must be rooted at "dist/"
           args=()
           while IFS= read -r -d '' f; do
