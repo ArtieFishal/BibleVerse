@@ -47,9 +47,9 @@ jobs:
             exit 1
           fi
 
-          echo "=== JWT check (Pinata /data/pinningList) ==="
+          echo "=== JWT check (Pinata /data/pinList) ==="
           curl -s -w "\nHTTP_STATUS:%{http_code}\n" \
-            -X GET "https://api.pinata.cloud/data/pinningList?status=pinned&pageLimit=1" \
+            -X GET "https://api.pinata.cloud/data/pinList?status=pinned&pageLimit=1" \
             -H "Authorization: Bearer ${PINATA_JWT}" | head -20
 
           # Pinata directory upload: each file path must be rooted at "dist/"
@@ -59,15 +59,17 @@ jobs:
           done < <(find dist -type f -print0)
           echo "Uploading ${#args[@]} files..."
 
-          response=$(curl -s --fail-with-body -X POST \
+          echo "=== Upload response (status + body) ==="
+          curl -s -w "\nHTTP_STATUS:%{http_code}\n" -X POST \
             "https://api.pinata.cloud/pinning/pinFileToIPFS" \
             -H "Authorization: Bearer ${PINATA_JWT}" \
             -F 'pinataMetadata={"name":"bibleverse-vr"}' \
             -F 'pinataOptions={"cidVersion":1}' \
-            "${args[@]}")
+            "${args[@]}" | tee /tmp/pinata-upload.log
+          echo "=== end upload response ==="
+          response=$(cat /tmp/pinata-upload.log | sed '$d')
 
-          echo "$response"
-          cid=$(echo "$response" | jq -r '.IpfsHash')
+          cid=$(echo "$response" | jq -r '.IpfsHash' 2>/dev/null)
           if [ -z "$cid" ] || [ "$cid" = "null" ]; then
             echo "::error::Upload failed: $response"
             exit 1
