@@ -27,6 +27,10 @@ export function StartScreen({ onBeginWalk, onFilmTheater }: Props) {
           </button>
         </div>
         <p className="hint">Fullscreen with sound · six more stories in the theater</p>
+        <p className="preview-note">
+          This is just the beginning — these films are a preview of the kinds of immersive VR
+          experiences to come.
+        </p>
       </div>
     </div>
   )

@@ -164,6 +164,13 @@ canvas {
   color: rgba(255, 246, 234, 0.62);
 }
 
+.preview-note {
+  margin: 0.8rem 0 0;
+  font-size: 0.9rem;
+  font-style: italic;
+  color: rgba(212, 175, 55, 0.85);
+}
+
 .hud {
   position: absolute;
   top: 0;
