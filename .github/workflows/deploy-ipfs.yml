@@ -4,13 +4,8 @@ on:
   push:
     branches: [main]
     paths:
-      - "src/**"
-      - "public/**"
-      - "index.html"
-      - "package.json"
-      - "pnpm-lock.yaml"
-      - "vite.config.ts"
-      - "tsconfig*.json"
+      - "dist/**"
+      - "site/**"
       - ".github/workflows/deploy-ipfs.yml"
   workflow_dispatch:
 
@@ -21,16 +16,15 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: 10
-
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: 22
-          cache: pnpm
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
@@ -82,10 +76,53 @@ jobs:
             echo ""
             echo "Preview: https://ipfs.io/ipfs/$cid/ | https://gateway.pinata.cloud/ipfs/$cid/"
             echo ""
-            echo "### To publish on vr.bibleverse.eth"
-            echo "1. Open https://app.ens.domains/vr.bibleverse.eth?tab=records"
+            echo "### To publish on bibleverse.eth"
+            echo "1. Open https://app.ens.domains/bibleverse.eth?tab=records"
             echo "2. Edit **Content Hash** to: \`ipfs://$cid\`"
-            echo "3. Confirm the transaction with the wallet that owns bibleverse.eth."
-            echo "4. Point the main site ENTER HERE link to https://vr.bibleverse.eth.limo"
+            echo "3. Confirm the transaction with the wallet that owns the name."
+            echo ""
+            echo "### Film Theater lives at its own CID"
+            echo "The theater app is pinned at bafybeih4rmsqk7f7uz7omxiaja7cc23e3wgb4ncmzlmzkf5iprebex3nvu"
+            echo "The main site's Film Theater button links to: https://ipfs.io/ipfs/bafybeih4rmsqk7f7uz7omxiaja7cc23e3wgb4ncmzlmzkf5iprebex3nvu/"
           } >> "$GITHUB_STEP_SUMMARY"
-          echo "CID: $cid"
+
+      - name: Upload site/ to Pinata
+        env:
+          PINATA_JWT: ${{ secrets.PINATA_JWT }}
+        run: |
+          if [ -z "$PINATA_JWT" ]; then
+            echo "::error::PINATA_JWT secret is not set."
+            exit 1
+          fi
+          args=()
+          while IFS= read -r -d '' f; do
+            args+=(-F "file=@${f};filename=${f}")
+          done < <(find site -type f -print0)
+          echo "Uploading site/ (${#args[@]} files)..."
+
+          response=$(curl -s --fail-with-body -X POST \
+            "https://api.pinata.cloud/pinning/pinFileToIPFS" \
+            -H "Authorization: Bearer ${PINATA_JWT}" \
+            -F 'pinataMetadata={"name":"bibleverse-site"}' \
+            -F 'pinataOptions={"cidVersion":1}' \
+            "${args[@]}")
+
+          echo "$response"
+          cid=$(echo "$response" | jq -r '.IpfsHash')
+          if [ -z "$cid" ] || [ "$cid" = "null" ]; then
+            echo "::error::site upload failed: $response"
+            exit 1
+          fi
+
+          {
+            echo "## Main site pinned to IPFS"
+            echo ""
+            echo "**CID:** \`$cid\`"
+            echo ""
+            echo "Preview: https://ipfs.io/ipfs/$cid/ | https://gateway.pinata.cloud/ipfs/$cid/"
+            echo ""
+            echo "### To restore the main bibleverse.eth page"
+            echo "1. Open https://app.ens.domains/bibleverse.eth?tab=records"
+            echo "2. Edit **Content Hash** to: \`ipfs://$cid\`"
+            echo "3. Confirm the transaction with the wallet that owns the name."
+          } >> "$GITHUB_STEP_SUMMARY"

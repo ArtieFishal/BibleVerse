@@ -1,0 +1,212 @@
+.transaction-popup .avatar {
+    background-color: #1b1b1f;
+    border-radius: 100%;
+    height: 38px;
+    width: 38px
+}
+
+.transaction-popup button {
+    background-color: #646cff;
+    border-color: #747bff;
+    border-radius: 20px;
+    border: 1px solid #747bff;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 500;
+    height: 38px;
+    line-height: 38px;
+    padding: 0 20px;
+    transition: background-color .2s
+}
+
+.transaction-popup button:hover {
+    background-color: #747bff
+}
+
+.transaction-popup button:disabled {
+    opacity: .5;
+    pointer-events: none
+}
+
+.transaction-popup .inline {
+    align-items: center;
+    display: flex;
+    gap: 8px
+}
+
+@media screen and (max-width: 600px) {
+    .transaction-popup .inline {
+        flex-direction: column;
+        gap: 12px;
+        text-align: center
+    }
+}
+
+.transaction-popup input {
+    background-color: #ffffff13;
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, .075);
+    color: #fff;
+    flex: 1;
+    font-size: 14px;
+    font-weight: 500;
+    height: 38px;
+    line-height: 38px;
+    padding: 0 20px;
+    transition: background-color .2s
+}
+
+.transaction-popup .text {
+    font-weight: 400;
+    white-space: nowrap
+}
+
+.transaction-popup .row {
+    align-items: center;
+    display: flex;
+    justify-content: space-between;
+    border: 1px solid #eee;
+    background: #f9faff;
+    padding: 20px 0px;
+    margin: 0;
+    border-radius: 10px;
+}
+
+@media screen and (max-width: 600px) {
+    .transaction-popup .row {
+        flex-direction: column;
+        gap: 12px
+    }
+}
+
+.transaction-popup .set {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px
+}
+
+@media screen and (max-width: 600px) {
+    .transaction-popup .set {
+        flex-direction: column
+    }
+}
+
+.transaction-popup .subtext {
+    opacity: .7;
+    font-weight: 400;
+    font-size: 12px
+}
+
+.transaction-popup .stack {
+    display: flex;
+    flex-direction: column;
+    gap: 4px
+}
+
+
+
+
+/*-- css code for modal popup --*/
+.transaction-popup .set {
+    display: grid;
+}
+.transaction-popup .container {
+    background : transparent;
+    border: none;
+    padding: 0;
+    margin: 0;
+}
+.transaction-popup button{
+    
+    background-color: transparent;
+    border-color: transparent;
+    border: 1px solid transparent; 
+    color: #333;
+    font-size: 16px;
+    text-align: left;
+    border-radius: 6px;
+    height: auto;
+    line-height: 1.2;
+    padding: 12px;
+    font-weight: 600;
+    background: #f8f9fa;
+}
+.transaction-popup button:hover {
+    background-color: #ededed;
+}
+.transaction-popup .modal-header .close {
+    padding: 5px 10px;
+    margin: 0;
+}
+.modal-backdrop {
+    z-index: -1;
+}
+.transaction-popup .avatar {
+    width:40px;
+    height: 40px;
+    margin-left: 17px;
+}
+.transaction-popup .avatar img {
+    border-radius: 50%;
+}
+.transaction-popup form.set button{
+    background-color: #646cff;
+    color: #fff;
+    width: min-content;
+    padding: 10px 25px;
+    white-space: nowrap;
+}
+.transaction-popup button.button {
+    background: #484848;
+    color: #fff;
+    margin-right: 3px;
+    padding: 12px 25px;
+}
+.transaction-popup button.button:hover {
+    opacity: .9;
+    background: #000;
+}
+.transaction-popup .text {
+    color: #333;
+    font-weight: 600;
+}
+
+.transaction-popup .modal-content {
+    border-radius: 15px;
+}
+.transaction-popup .modal-header {
+    background: #fff;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+}
+.transaction-popup .modal-body {
+    padding: 25px;
+    background: #fff;
+    border-radius: 15px;
+}
+.transaction-popup .stack .set {
+    justify-content: center;
+    margin-top: 34px;
+}
+.transaction-popup .stack {
+    color: #333;
+}
+.transaction-popup .transaction-hash {
+    word-break: break-all;
+    margin-top: 20px;
+}
+
+.transaction-popup .confirm {
+    color: #4bb543;
+    font-size: 19px;
+    margin-top: 10px;
+}
+
+.transaction-popup .error {
+    color: #FF0000;
+    text-align: center;
+    margin-top: 10px;
+}
+
+
+/*-- //css code for modal popup --*/
